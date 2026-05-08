@@ -2,7 +2,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Dish } from '../types';
 
-// El namespace por usuario garantiza aislamiento de datos
 const getKey = (userId: string) => `dishes:${userId}`;
 
 export async function loadDishes(userId: string): Promise<Dish[]> {

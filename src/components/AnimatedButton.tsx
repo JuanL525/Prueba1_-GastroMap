@@ -1,10 +1,10 @@
 // src/components/AnimatedButton.tsx
 import React from 'react';
-import { Text, Pressable } from 'react-native';
+import { Pressable, Text } from 'react-native';
 import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
+    useAnimatedStyle,
+    useSharedValue,
+    withSpring,
 } from 'react-native-reanimated';
 
 // Convertimos Pressable en un componente animable
@@ -14,9 +14,10 @@ type Props = {
   label: string;
   onPress: () => void;
   variant?: 'primary' | 'secondary';
+  flex?: boolean;
 };
 
-export default function AnimatedButton({ label, onPress, variant = 'primary' }: Props) {
+export default function AnimatedButton({ label, onPress, variant = 'primary', flex = false }: Props) {
   // Estado compartido para la animación de escala
   const scale = useSharedValue(1);
 
@@ -44,7 +45,7 @@ export default function AnimatedButton({ label, onPress, variant = 'primary' }: 
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       style={animatedStyle}
-      className={`py-4 rounded-xl items-center justify-center w-full ${
+      className={`py-4 rounded-xl items-center justify-center ${flex ? 'flex-1' : 'w-full'} ${
         isPrimary ? 'bg-[#006491]' : 'bg-[#F5F5F5]'
       }`}
     >

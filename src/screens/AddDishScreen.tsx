@@ -2,7 +2,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Alert, Image, ScrollView, Text, TextInput, View, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Alert, Image, ScrollView, Text, TextInput, View } from 'react-native';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import AnimatedButton from '../components/AnimatedButton';
@@ -103,8 +103,8 @@ export default function AddDishScreen({ navigation }: any) {
 
         <Text className="text-[#1A1A1A] font-medium mb-2">Foto del plato</Text>
         <View className="flex-row gap-3 mb-4">
-          <AnimatedButton label="📷 Cámara" onPress={() => pickImage('camera')} />
-          <AnimatedButton label="🖼️ Galería" onPress={() => pickImage('gallery')} variant="secondary" />
+          <AnimatedButton label="📷 Cámara" onPress={() => pickImage('camera')} flex />
+          <AnimatedButton label="🖼️ Galería" onPress={() => pickImage('gallery')} variant="secondary" flex />
         </View>
 
         {photoUri ? (
