@@ -2,7 +2,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Alert, Image, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, Image, ScrollView, Text, TextInput, View, ActivityIndicator } from 'react-native';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import AnimatedButton from '../components/AnimatedButton';
@@ -13,8 +13,12 @@ import { captureLocation } from '../hooks/useLocation';
 type FormData = { name: string };
 
 export default function AddDishScreen({ navigation }: any) {
-  const { user } = useAuth();
-  const { addDish } = useDishes(user!.id);
+  // 1. Extraemos loading de useAuth
+  const { user, loading: authLoading } = useAuth();
+  
+  // 2. Usamos el fallback seguro con ?? ''
+  const { addDish } = useDishes(user?.id ?? '');
+  
   const { control, handleSubmit, reset } = useForm<FormData>();
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -31,17 +35,18 @@ export default function AddDishScreen({ navigation }: any) {
   };
 
   const onSubmit = async ({ name }: FormData) => {
+    if (!user) return; // Protección extra
+    
     if (!photoUri) {
       Alert.alert('Foto requerida', 'Debes seleccionar o tomar una foto del plato');
       return;
     }
     setLoading(true);
     try {
-      // El GPS se captura aquí, en el momento de presionar Registrar
       const location = await captureLocation();
       addDish({
         id: uuidv4(),
-        user_id: user!.id,
+        user_id: user.id, // Ya podemos usar user.id seguro
         name,
         photo_uri: photoUri,
         created_at: new Date().toISOString(),
@@ -56,6 +61,18 @@ export default function AddDishScreen({ navigation }: any) {
       setLoading(false);
     }
   };
+
+  // 3. Pantalla de carga mientras se verifica el usuario
+  if (authLoading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+        <ActivityIndicator size="large" color="#006491" />
+      </View>
+    );
+  }
+
+  // 4. Si no hay usuario, retornamos null
+  if (!user) return null;
 
   return (
     <ScrollView className="flex-1 bg-white">

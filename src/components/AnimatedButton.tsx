@@ -1,42 +1,60 @@
 // src/components/AnimatedButton.tsx
-// Animación 3: withSpring en el botón al presionar
-import { Pressable, Text } from 'react-native';
+import React from 'react';
+import { Text, Pressable } from 'react-native';
 import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withSpring,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
 } from 'react-native-reanimated';
 
-interface Props {
+// Convertimos Pressable en un componente animable
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+type Props = {
   label: string;
   onPress: () => void;
   variant?: 'primary' | 'secondary';
-}
+};
 
 export default function AnimatedButton({ label, onPress, variant = 'primary' }: Props) {
+  // Estado compartido para la animación de escala
   const scale = useSharedValue(1);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
+  // Estilo animado que reacciona al valor de scale
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
 
-  const handlePress = () => {
-    scale.value = withSpring(0.93, {}, () => {
-      scale.value = withSpring(1);
-    });
-    onPress();
+  // Funciones para manejar el toque
+  const handlePressIn = () => {
+    scale.value = withSpring(0.95); // Se encoge ligeramente al tocar
   };
 
-  const bgColor = variant === 'primary' ? 'bg-[#006491]' : 'bg-[#E31837]';
+  const handlePressOut = () => {
+    scale.value = withSpring(1); // Vuelve a su tamaño normal
+  };
 
+  const isPrimary = variant === 'primary';
+  
   return (
-    <Animated.View style={animatedStyle} className="flex-1">
-      <Pressable
-        className={`${bgColor} rounded-xl py-3 items-center`}
-        onPress={handlePress}
+    <AnimatedPressable
+      onPress={onPress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={animatedStyle}
+      className={`py-4 rounded-xl items-center justify-center w-full ${
+        isPrimary ? 'bg-[#006491]' : 'bg-[#F5F5F5]'
+      }`}
+    >
+      <Text 
+        className={`font-bold text-lg ${
+          isPrimary ? 'text-white' : 'text-[#1A1A1A]'
+        }`}
       >
-        <Text className="text-white font-semibold text-base">{label}</Text>
-      </Pressable>
-    </Animated.View>
+        {label}
+      </Text>
+    </AnimatedPressable>
   );
 }
