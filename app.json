@@ -38,6 +38,24 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Gastro Map necesita acceso a tu cámara para fotografiar tus platos."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Gastro Map necesita acceso a tu galería para seleccionar fotos."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Gastro Map necesita tu ubicación para registrar dónde comiste."
+        }
       ]
     ],
     "experiments": {
