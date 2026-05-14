@@ -1,7 +1,7 @@
 // src/components/MapSelector.tsx
 // Permite al usuario seleccionar manualmente un punto en el mapa
 // Se usa en AddDishScreen como alternativa al GPS automático
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
@@ -19,6 +19,7 @@ export default function MapSelector({
   onClose,
 }: Props) {
   const webViewRef = useRef<WebView>(null);
+  const [selectedLocation, setSelectedLocation] = useState<{ latitude: number; longitude: number } | null>(null);
 
   const leafletHTML = `
 <!DOCTYPE html>
@@ -82,10 +83,16 @@ export default function MapSelector({
     try {
       const data = JSON.parse(event.nativeEvent.data);
       if (data.type === 'LOCATION_SELECTED') {
-        onLocationSelect(data.lat, data.lng);
+        setSelectedLocation({ latitude: data.lat, longitude: data.lng });
       }
     } catch (e) {
       console.error('Error parsing WebView message:', e);
+    }
+  };
+
+  const handleConfirm = () => {
+    if (selectedLocation) {
+      onLocationSelect(selectedLocation.latitude, selectedLocation.longitude);
     }
   };
 
@@ -112,6 +119,26 @@ export default function MapSelector({
         <Text className="text-[#6B7280] text-xs text-center">
           Toca cualquier punto del mapa para seleccionar la ubicación del plato
         </Text>
+        {selectedLocation ? (
+          <Text className="text-[#1A1A1A] text-sm text-center mt-3">
+            Ubicación seleccionada: {selectedLocation.latitude.toFixed(6)}, {selectedLocation.longitude.toFixed(6)}
+          </Text>
+        ) : null}
+        <View className="mt-4 flex-row gap-3">
+          <Pressable
+            onPress={handleConfirm}
+            disabled={!selectedLocation}
+            className={`flex-1 rounded-xl py-3 items-center ${selectedLocation ? 'bg-[#006491]' : 'bg-[#94a3b8]'}`}
+          >
+            <Text className="text-white font-semibold">Confirmar ubicación</Text>
+          </Pressable>
+          <Pressable
+            onPress={onClose}
+            className="flex-1 bg-white border border-[#D1D5DB] rounded-xl py-3 items-center"
+          >
+            <Text className="text-[#1A1A1A] font-semibold">Cancelar</Text>
+          </Pressable>
+        </View>
       </View>
     </View>
   );

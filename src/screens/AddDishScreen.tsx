@@ -97,7 +97,13 @@ export default function AddDishScreen({ navigation }: any) {
         <Controller
           control={control}
           name="name"
-          rules={{ required: 'El nombre del plato es obligatorio' }}
+          rules={{
+            required: 'El nombre del plato es obligatorio',
+            pattern: {
+              value: /^[^0-9]+$/,
+              message: 'El nombre del plato no puede contener números',
+            },
+          }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <View className="mb-5">
               <Text className="text-[#1A1A1A] font-medium mb-2">Nombre del plato</Text>
