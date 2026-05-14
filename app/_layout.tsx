@@ -1,4 +1,5 @@
 // app/_layout.tsx
+import 'react-native-gesture-handler';
 import 'react-native-get-random-values';
 import '../global.css';
 import 'react-native-gesture-handler';

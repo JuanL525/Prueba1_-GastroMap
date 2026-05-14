@@ -2,6 +2,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '../hooks/useAuth';
 import AddDishScreen from '../screens/AddDishScreen';
+import DishDetailScreen from '../screens/DishDetailScreen';
 import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
@@ -19,6 +20,7 @@ export default function RootNavigator() {
         <>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="AddDish" component={AddDishScreen} />
+          <Stack.Screen name="DishDetail" component={DishDetailScreen} />
         </>
       ) : (
         <>

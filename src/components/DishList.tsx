@@ -8,9 +8,10 @@ import DishCard from './DishCard';
 interface Props {
   dishes: Dish[];
   onDelete: (id: string) => void;
+  onPress?: (dish: Dish) => void;
 }
 
-export default function DishList({ dishes, onDelete }: Props) {
+export default function DishList({ dishes, onDelete, onPress }: Props) {
   if (dishes.length === 0) {
     return (
       <View className="flex-1 items-center justify-center">
@@ -27,7 +28,7 @@ export default function DishList({ dishes, onDelete }: Props) {
       keyExtractor={(item) => item.id}
       renderItem={({ item, index }) => (
         <Animated.View entering={FadeInDown.delay(index * 60).springify()}>
-          <DishCard dish={item} onDelete={onDelete} />
+          <DishCard dish={item} onDelete={onDelete} onPress={onPress ? () => onPress(item) : undefined} />
         </Animated.View>
       )}
       contentContainerStyle={{ paddingBottom: 32 }}

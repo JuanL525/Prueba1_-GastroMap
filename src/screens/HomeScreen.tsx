@@ -1,8 +1,9 @@
 // src/screens/HomeScreen.tsx
-import { Pressable, Text, View, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 import DishList from '../components/DishList';
 import { useAuth } from '../hooks/useAuth';
 import { useDishes } from '../hooks/useDishes';
+import { Dish } from '../types';
 
 export default function HomeScreen({ navigation }: any) {
   // Extraemos también "loading" de useAuth
@@ -44,7 +45,11 @@ export default function HomeScreen({ navigation }: any) {
             <Text className="text-[#6B7280]">Cargando platos...</Text>
           </View>
         ) : (
-          <DishList dishes={dishes} onDelete={deleteDish} />
+          <DishList
+            dishes={dishes}
+            onDelete={deleteDish}
+            onPress={(dish: Dish) => navigation.navigate('DishDetail', { dish })}
+          />
         )}
       </View>
 

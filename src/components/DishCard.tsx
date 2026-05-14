@@ -1,6 +1,6 @@
 // src/components/DishCard.tsx
 // Animación 2: FadeOutLeft al eliminar con swipe
-import { Image, Text, View } from 'react-native';
+import { Image, Text, View, Pressable } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
     FadeOutLeft,
@@ -14,11 +14,12 @@ import { Dish } from '../types';
 interface Props {
   dish: Dish;
   onDelete: (id: string) => void;
+  onPress?: () => void;
 }
 
 const SWIPE_THRESHOLD = -120;
 
-export default function DishCard({ dish, onDelete }: Props) {
+export default function DishCard({ dish, onDelete, onPress }: Props) {
   const translateX = useSharedValue(0);
 
   const panGesture = Gesture.Pan()
@@ -66,6 +67,11 @@ export default function DishCard({ dish, onDelete }: Props) {
             })}
           </Text>
           <Text className="text-[#E31837] text-xs mt-3">← Desliza para eliminar</Text>
+          {onPress ? (
+            <Pressable onPress={onPress} className="mt-4 bg-[#006491] px-4 py-3 rounded-xl items-center">
+              <Text className="text-white font-semibold">Ver ubicación</Text>
+            </Pressable>
+          ) : null}
         </View>
       </Animated.View>
     </GestureDetector>
